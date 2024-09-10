@@ -2,8 +2,7 @@ import os
 import json
 import subprocess
 import logging
-import magic
-import ctypes
+import magic  
 import tarfile
 import shutil
 import tempfile
@@ -39,7 +38,11 @@ if not os.path.exists(REVIEW_FILE_PATH):
         json.dump([], file)  # Initialize as an empty list
 
 # Initialize file type detector
-mime = magic.Magic()
+try:
+    mime = magic.Magic(mime=True)  # This assumes libmagic is properly installed
+except Exception as e:
+    logger.error(f"Failed to initialize magic: {e}")
+    mime = None
 
 def sanitize_input(input_value):
     """Sanitize user inputs to prevent command injection and path traversal attacks."""
@@ -97,7 +100,6 @@ def review():
     review_data = get_review_data()
     return render_template('review.html', review_data=review_data)
 
-
 @app.route('/mark_reviewed/<int:index>', methods=['POST'])
 def mark_reviewed(index):
     """Mark a review item as reviewed."""
@@ -154,6 +156,7 @@ def run_trivy_scan(command, output_path):
         return {'error': f"Error running Trivy scan: {e.stderr}"}
 
 def run_trivy_image_scan(image_name):
+    """Run a Trivy image scan."""
     scan_output_path = os.path.join(app.config['SCAN_RESULTS_FOLDER'], 'trivy_image_scan.json')
     logger.info(f"Running Trivy image scan on: {image_name}")
     command = ['trivy', 'image', image_name, '--format', 'json']
@@ -175,6 +178,7 @@ def run_trivy_fs_scan(target_path):
         return {'error': f"Error running Trivy scan: {e.stderr}"}
 
 def run_trivy_repo_scan(git_repo_url):
+    """Run Trivy scan on a Git repository."""
     logger.info(f"Running Trivy remote Git scan on: {git_repo_url}")
     scan_output_path = os.path.join(app.config['SCAN_RESULTS_FOLDER'], 'trivy_repo_scan.json')
     command = ['trivy', 'repo', git_repo_url, '--format', 'json']
@@ -182,12 +186,13 @@ def run_trivy_repo_scan(git_repo_url):
         return run_trivy_scan(command, scan_output_path)
     except subprocess.CalledProcessError as e:
         logger.error(f"Error running Trivy Git scan: {e.stderr}")
-        return f"Error running Trivy Git scan: {e.stderr}"
+        return {'error': f"Error running Trivy Git scan: {e.stderr}"}
     except Exception as e:
         logger.error(f"Unexpected error during Trivy Git scan: {e}")
-        return f"Unexpected error: {e}"
+        return {'error': f"Unexpected error: {e}"}
 
 def clone_git_repo(git_repo_url, clone_path):
+    """Clone a Git repository to the specified path."""
     logger.info(f"Cloning Git repository: {git_repo_url}")
     try:
         subprocess.run(['git', 'clone', git_repo_url, clone_path], check=True)
@@ -198,6 +203,7 @@ def clone_git_repo(git_repo_url, clone_path):
         return False
 
 def run_grype_image_scan(image_name):
+    """Run Grype scan on a Docker image."""
     scan_output_path = os.path.join(app.config['SCAN_RESULTS_FOLDER'], 'grype_image_scan.json')
     logger.info(f"Running Grype image scan on: {image_name}")
     try:
@@ -268,9 +274,18 @@ def run_clamav_docker_image_scan(image_name):
         return [{'error': f"Error running ClamAV scan on Docker image: {e.stderr}"}]
 
 def detect_file_type(file_path):
-    file_type = mime.from_file(file_path)
-    logger.info(f"Detected file type: {file_type}")
-    return file_type
+    """Detect the type of a file using libmagic."""
+    if mime:
+        try:
+            file_type = mime.from_file(file_path)
+            logger.info(f"Detected file type: {file_type}")
+            return file_type
+        except Exception as e:
+            logger.error(f"Failed to detect file type: {e}")
+            return "Unknown file type"
+    else:
+        logger.error("libmagic not initialized.")
+        return "libmagic not available"
 
 def format_scan_result(result, scan_type):
     """Ensure each result has 'path', 'scan_type', 'severity', and 'details'."""
