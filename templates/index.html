@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heimdall Scanner</title>
+
+    <!-- Bootstrap CSS (local) -->
+    <link rel="stylesheet" href="../static/bootstrap.min.css">
+
+    <!-- Bootstrap Icons (local) -->
+    <link rel="stylesheet" href="../static/bootstrap-icons.css">
+
+    <!-- Custom CSS for styling (local) -->
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="light-mode">
+    <!-- Header Bar -->
+    <header class="header-bar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <!-- Left Side: Logo and Search -->
+            <div class="header-left d-flex align-items-center">
+                <img src="../static/images/tool-icon.png" alt="Tool Icon" class="logo">
+                <input type="search" class="form-control search-bar" placeholder="Search URL, file system, image, git repository">
+            </div>
+
+            <!-- Right Side: Notifications, Support, and Theme Switch -->
+            <div class="header-right d-flex align-items-center">
+                <button class="btn btn-link"><i class="bi bi-bell"></i></button> <!-- Notification Icon -->
+                <button class="btn btn-link"><i class="bi bi-question-circle"></i> Support</button> <!-- Support -->
+                <button class="btn btn-link theme-toggle" id="themeToggle"><i class="bi bi-sun"></i></button> <!-- Light/Dark Mode Toggle -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container text-center mt-5">
+            <!-- Tool Logo and Title -->
+            <img src="../static/images/tool-logo.png" alt="Tool Logo" class="tool-logo mb-3">
+            <h1 class="tool-title mb-3">Heimdall Scanner</h1>
+            <p class="tool-description">A powerful tool to scan file systems, images, and Git repositories for potential threats.</p>
+        </div>
+
+        <!-- Link Tabs Section -->
+        <div class="link-section">
+            <div class="container">
+                <div class="tab-links">
+                    <a href="#" class="tab-link" id="file-system-tab">File System Scan</a>
+                    <a href="#" class="tab-link" id="image-scan-tab">Image Scan</a>
+                    <a href="#" class="tab-link" id="git-repo-tab">Git Repository Scan</a>
+                </div>
+                <div class="tab-separator"></div>  <!-- The horizontal line separator -->
+                <div class="tab-underline"></div>    <!-- The moving underline -->
+            </div>
+        </div>
+
+        <!-- Form Sections -->
+        <div class="form-sections">
+            <!-- File System Form -->
+            <div id="file-system-form" class="tab-content active">  <!-- Set to active by default -->
+                <div class="container">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="filesystem_input" class="form-label">File System Path:</label>
+                            <input type="text" class="form-control" id="filesystem_input" name="filesystem_input" placeholder="Enter file system path">
+                        </div>
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Or upload files:</label>
+                            <input type="file" class="form-control" id="file" name="file" multiple>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Scan</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Image Scan Form -->
+            <div id="image-scan-form" class="tab-content">
+                <div class="container">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="image_name" class="form-label">Container Image Name:</label>
+                            <input type="text" class="form-control" id="image_name" name="image_name" placeholder="example/image:tag">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Scan</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Git Repository Form -->
+            <div id="git-repo-form" class="tab-content">
+                <div class="container">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="git_repo_url" class="form-label">Git Repository URL:</label>
+                            <input type="url" class="form-control" id="git_repo_url" name="git_repo_url" placeholder="https://github.com/user/repo.git">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Scan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS (local) -->
+    <script src="../static/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for handling tabs and theme toggle (local) -->
+    <script src="../static/script.js"></script>
+</body>
+</html>

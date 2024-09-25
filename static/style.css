@@ -1,0 +1,123 @@
+/* Header Bar Styling */
+.header-bar {
+    background-color: #1c1c1c;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+
+.header-left .logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.search-bar {
+    width: 300px;
+    margin-left: 10px;
+    background-color: #2e3b4e;
+    color: #fff;
+    border: none;
+}
+
+.header-right button {
+    background: none;
+    border: none;
+    color: #fff;
+    margin-left: 20px;
+}
+
+.theme-toggle {
+    color: #fff;
+    background: none;
+    border: none;
+    margin-left: 15px;
+    font-size: 1.2rem;
+}
+
+/* Tool Logo and Title */
+.tool-logo {
+    width: 80px;
+    height: 80px;
+}
+
+.tool-title {
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+.tool-description {
+    color: #ddd;
+    margin-bottom: 2rem;
+}
+
+/* Link Section Styling */
+.link-section .container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.tab-links {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+}
+
+.tab-link {
+    margin: 0 15px;
+    color: #aaa;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 15px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.tab-link:hover, .tab-link.active {
+    color: #fff;
+}
+
+/* Separator line that divides tabs and forms */
+.tab-separator {
+    width: 100%;
+    height: 2px;
+    background-color: #aaa;
+    position: relative;
+    z-index: 0;
+    margin-bottom: 0;
+}
+
+/* Sliding underline */
+.tab-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: #00aaff;
+    transition: width 0.3s ease, transform 0.3s ease;
+    z-index: 2; /* Ensure it's above the separator line */
+    width: 100px; /* Default width to ensure it's initially visible */
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    padding-top: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Dark and Light Mode */
+body.dark-mode {
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+}
+
+body.light-mode {
+    background-color: #f0f2f5;
+    color: #212529;
+}
